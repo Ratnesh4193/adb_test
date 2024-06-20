@@ -18,7 +18,7 @@ client = MongoClient(mongo_uri)
 # Ensure the 'test_db' database and 'todo_items' collection are ready for use
 try:
     db = client['test_db']
-    collection = db['todos']
+    collection = db['todos_collection']
 except errors.PyMongoError as e:
     logger.error(f"Error connecting to MongoDB: {e}")
     raise

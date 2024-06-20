@@ -1,7 +1,7 @@
 // src/hooks/useTodos.js
 import { useState, useEffect } from "react";
 
-const API_URL = "http://localhost:8000/todos/";
+const API_URL = "http://localhost:8000/todos";
 
 const useTodos = () => {
   const [todos, setTodos] = useState([]);
@@ -27,10 +27,10 @@ const useTodos = () => {
   };
 
   const addTodo = async (text) => {
-    const newTodo = { text, completed: false };
-
+    const newTodo = { id: Date.now(), text, completed: false };
+    console.log(newTodo);
     try {
-      const response = await fetch(API_URL, {
+      const response = await fetch(`${API_URL}/`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -42,8 +42,8 @@ const useTodos = () => {
         throw new Error("Network response was not ok");
       }
 
-      const data = await response.json();
-      setTodos([...todos, data]);
+      await response.json();
+      setTodos([...todos, newTodo]);
     } catch (error) {
       setError(error);
     } finally {
@@ -53,12 +53,13 @@ const useTodos = () => {
 
   const toggleTodo = async (id) => {
     const todo = todos.find((todo) => todo.id === id);
+
     if (!todo) return;
 
     const updatedTodo = { ...todo, completed: !todo.completed };
 
     try {
-      const response = await fetch(`${API_URL}${id}/`, {
+      const response = await fetch(`${API_URL}/${id}/`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -70,8 +71,8 @@ const useTodos = () => {
         throw new Error("Network response was not ok");
       }
 
-      const data = await response.json();
-      setTodos(todos.map((todo) => (todo.id === id ? data : todo)));
+      await response.json();
+      setTodos(todos.map((todo) => (todo.id === id ? updatedTodo : todo)));
     } catch (error) {
       setError(error);
     } finally {
@@ -81,7 +82,7 @@ const useTodos = () => {
 
   const deleteTodo = async (id) => {
     try {
-      const response = await fetch(`${API_URL}${id}/`, {
+      const response = await fetch(`${API_URL}/${id}`, {
         method: "DELETE",
       });
 
