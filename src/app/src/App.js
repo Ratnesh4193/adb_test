@@ -1,29 +1,35 @@
-import './App.css';
-import logo from './logo.svg';
+// src/App.js
+import React from "react";
+import TodoList from "./components/TodoList";
+import TodoForm from "./components/TodoForm";
+import useTodos from "./hooks/useTodos";
+import "./App.css";
 
+const App = () => {
+  const { todos, loading, error, addTodo, toggleTodo, deleteTodo } = useTodos();
 
-export function App() {
   return (
-    <div className="App">
-      <div>
-        <h1>List of TODOs</h1>
-        <li>Learn Docker</li>
-        <li>Learn React</li>
-      </div>
-      <div>
-        <h1>Create a ToDo</h1>
-        <form>
-          <div>
-            <label for="todo">ToDo: </label>
-            <input type="text" />
-          </div>
-          <div style={{"marginTop": "5px"}}>
-            <button>Add ToDo!</button>
-          </div>
-        </form>
-      </div>
+    <div className="todo-container">
+      {loading ? (
+        <div>
+          <h1>Loading...</h1>
+        </div>
+      ) : error ? (
+        <div>
+          <h1>{error.message}</h1>
+        </div>
+      ) : (
+        <>
+          <TodoForm addTodo={addTodo} />
+          <TodoList
+            todos={todos}
+            toggleTodo={toggleTodo}
+            deleteTodo={deleteTodo}
+          />
+        </>
+      )}
     </div>
   );
-}
+};
 
 export default App;

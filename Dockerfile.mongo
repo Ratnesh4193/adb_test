@@ -1,0 +1,10 @@
+# Dockerfile for the mongo service
+FROM mongo:4.4
+
+WORKDIR /app
+
+ENV ENV_TYPE staging
+ENV MONGO_HOST mongo
+ENV MONGO_PORT 27017
+
+CMD ["mongod", "--bind_ip", "0.0.0.0"]

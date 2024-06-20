@@ -1,9 +1,11 @@
-version: '2'
+version: "2"
 services:
   api:
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile.api
     container_name: api
-    command: bash -c "cd /src/rest && python manage.py runserver 0.0.0.0:8000"
+    command: bash -c "cd src/rest && python manage.py runserver 0.0.0.0:8000"
     ports:
       - "8000:8000"
     links:
@@ -13,16 +15,20 @@ services:
       - ${ADBREW_CODEBASE_PATH}:/src
 
   app:
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile.app
     container_name: app
-    command: bash -c "cd /src/app && yarn install && yarn start"
+    command: bash -c "cd src/app && npm install && npm start"
     ports:
-      - "3000:3000"
+      - "3001:3000"
     volumes:
       - ${ADBREW_CODEBASE_PATH}:/src
 
   mongo:
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile.mongo
     container_name: mongo
     restart: always
     ports:
@@ -30,5 +36,36 @@ services:
     volumes:
       - ${ADBREW_CODEBASE_PATH}/db/:/data/db
     command: /usr/bin/mongod --bind_ip 0.0.0.0
+# version: '2'
+# services:
+#   api:
+#     build: .
+#     container_name: api
+#     command: bash -c "cd /src/rest && python manage.py runserver 0.0.0.0:8000"
+#     ports:
+#       - "8000:8000"
+#     links:
+#       - mongo
+#     volumes:
+#       - ${ADBREW_CODEBASE_PATH}/tmp:/tmp
+#       - ${ADBREW_CODEBASE_PATH}:/src
 
-    
+#   app:
+#     build: .
+#     container_name: app
+#     command: bash -c "cd /src/app && yarn install && yarn start"
+#     ports:
+#       - "3000:3000"
+#     volumes:
+#       - ${ADBREW_CODEBASE_PATH}:/src
+
+#   mongo:
+#     build: .
+#     container_name: mongo
+#     restart: always
+#     ports:
+#       - "27017:27017"
+#     volumes:
+#       - ${ADBREW_CODEBASE_PATH}/db/:/data/db
+#     command: /usr/bin/mongod --bind_ip 0.0.0.0
+

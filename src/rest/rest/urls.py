@@ -18,4 +18,5 @@ from .views import TodoListView
 
 urlpatterns = [
     path('todos/', TodoListView.as_view(), name='signup'),
+    path('todos/<int:todo_id>/', TodoListView.as_view(), name='todo-detail'),
 ]

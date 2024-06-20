@@ -1,0 +1,20 @@
+# Dockerfile for the api service
+FROM python:3.8
+
+WORKDIR /app
+
+ENV PYTHONPATH=$PYTHONPATH:/src/
+
+RUN pip install --upgrade pip
+
+ENV ENV_TYPE staging
+ENV MONGO_HOST mongo
+ENV MONGO_PORT 27017
+
+# copy the dependencies file to the working directory
+COPY . .
+
+# install dependencies
+RUN pip install -r src/requirements.txt
+
+CMD ["bash", "-c", "cd src/rest && python manage.py runserver 0.0.0.0:8000"]
